@@ -375,7 +375,7 @@ def chat(request: ChatRequest):
 
     relevant_chunks = vector_store.search(
         question,
-        top_k=1
+        top_k=3
     )
 
     # ========================================================
@@ -435,6 +435,7 @@ Answer the student's question using ONLY the LCWU
 knowledge base provided below.
 
 Rules:
+
 - Only answer questions related to LCWU.
 - Use only information present in the provided knowledge base.
 - Do not invent information.
@@ -442,6 +443,13 @@ Rules:
 - Do not provide approximate information.
 - Keep the answer clear and concise.
 - Use bullet points when listing multiple items.
+- Answer only the specific question asked by the student.
+- Do not repeat unrelated sections from the knowledge base.
+- If the student asks for one specific piece of information,
+  provide only that information.
+- If the student asks for multiple pieces of information,
+  provide only those requested pieces of information.
+- Do not copy the entire knowledge base into the answer.
 - If the exact information requested by the student is not present
   in the knowledge base, say exactly:
 
