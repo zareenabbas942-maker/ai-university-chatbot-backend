@@ -1,8 +1,21 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes.chat import router as chat_router
 
+
+configured_origins = os.getenv("CORS_ORIGINS", "")
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    *(
+        origin.strip().rstrip("/")
+        for origin in configured_origins.split(",")
+        if origin.strip()
+    ),
+]
 
 app = FastAPI(
     title="AI University Chatbot",
@@ -17,10 +30,8 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"https://[a-zA-Z0-9-]+\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
